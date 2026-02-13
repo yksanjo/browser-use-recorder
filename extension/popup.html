@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 360px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; padding: 16px; }
+    h1 { font-size: 16px; margin-bottom: 12px; color: #e94560; }
+    .status { padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; }
+    .status.idle { background: #16213e; border: 1px solid #0f3460; }
+    .status.recording { background: #2d1b1b; border: 1px solid #e94560; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+    .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 8px; transition: all 0.2s; }
+    .btn-record { background: #e94560; color: white; }
+    .btn-record:hover { background: #c73e54; }
+    .btn-stop { background: #533483; color: white; }
+    .btn-stop:hover { background: #3f2766; }
+    .btn-decision { background: #0f3460; color: #eee; }
+    .btn-decision:hover { background: #16213e; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .events { font-size: 12px; color: #888; margin-top: 8px; }
+    .decision-form { display: none; background: #16213e; padding: 12px; border-radius: 6px; margin-bottom: 8px; }
+    .decision-form.show { display: block; }
+    .decision-form label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; margin-top: 8px; }
+    .decision-form input, .decision-form select { width: 100%; padding: 6px 8px; border: 1px solid #0f3460; border-radius: 4px; background: #1a1a2e; color: #eee; font-size: 13px; }
+    .decision-form .btn-add { background: #e94560; margin-top: 12px; }
+    .event-count { font-weight: bold; color: #e94560; }
+  </style>
+</head>
+<body>
+  <h1>🔴 Browser Use Recorder</h1>
+  
+  <div id="status" class="status idle">
+    Status: <strong>Idle</strong> — Ready to record
+  </div>
+
+  <button id="btnRecord" class="btn btn-record">⏺ Start Recording</button>
+  <button id="btnStop" class="btn btn-stop" disabled>⏹ Stop Recording</button>
+  <button id="btnDecision" class="btn btn-decision" disabled>🤖 Add AI Decision Point</button>
+
+  <div id="decisionForm" class="decision-form">
+    <label>Condition (e.g., "price > 100")</label>
+    <input id="condition" placeholder='element.textContent includes "Sale"'>
+    
+    <label>If True — Action</label>
+    <input id="ifTrue" placeholder='click "Buy Now" button'>
+    
+    <label>If False — Action</label>
+    <input id="ifFalse" placeholder='skip to next item'>
+    
+    <label>Target Selector (optional)</label>
+    <input id="targetSelector" placeholder=".price, #total, etc.">
+    
+    <label>Description</label>
+    <input id="description" placeholder="Check if price is within budget">
+    
+    <button class="btn btn-add" id="btnAddDecision">Add Decision Point</button>
+  </div>
+
+  <div class="events">
+    Events captured: <span id="eventCount" class="event-count">0</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

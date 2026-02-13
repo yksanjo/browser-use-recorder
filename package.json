@@ -1,0 +1,24 @@
+{
+  "name": "browser-use-recorder",
+  "version": "1.0.0",
+  "description": "Record browser interactions and auto-generate computer use code with AI decision points",
+  "main": "src/index.js",
+  "bin": {
+    "browser-recorder": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "record": "node src/cli.js record",
+    "generate": "node src/cli.js generate",
+    "mcp-server": "node src/mcp-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.16.0",
+    "commander": "^11.1.0",
+    "chalk": "^4.1.2",
+    "open": "^8.4.2"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}

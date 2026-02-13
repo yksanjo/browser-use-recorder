@@ -1,0 +1,115 @@
+{
+  "id": "sample123",
+  "startTime": 1707850000000,
+  "endTime": 1707850060000,
+  "events": [
+    {
+      "type": "pageload",
+      "url": "https://shop.example.com/products",
+      "title": "Product Catalog",
+      "timestamp": 1707850001000,
+      "viewport": { "width": 1440, "height": 900 }
+    },
+    {
+      "type": "click",
+      "element": {
+        "tag": "input",
+        "type": "text",
+        "selector": "#search-input",
+        "text": "",
+        "placeholder": "Search products...",
+        "id": "search-input"
+      },
+      "x": 500,
+      "y": 80,
+      "url": "https://shop.example.com/products",
+      "timestamp": 1707850003000
+    },
+    {
+      "type": "input",
+      "element": {
+        "tag": "input",
+        "type": "text",
+        "selector": "#search-input",
+        "text": "",
+        "placeholder": "Search products...",
+        "id": "search-input"
+      },
+      "inputValue": "wireless headphones",
+      "inputType": "text",
+      "url": "https://shop.example.com/products",
+      "timestamp": 1707850005000
+    },
+    {
+      "type": "keydown",
+      "element": {
+        "tag": "input",
+        "type": "text",
+        "selector": "#search-input"
+      },
+      "key": "Enter",
+      "code": "Enter",
+      "url": "https://shop.example.com/products",
+      "timestamp": 1707850006000
+    },
+    {
+      "type": "navigation",
+      "navigationType": "pushState",
+      "url": "https://shop.example.com/products?q=wireless+headphones",
+      "timestamp": 1707850007000
+    },
+    {
+      "type": "ai_decision",
+      "condition": "price > 100",
+      "ifTrue": "skip",
+      "ifFalse": "click \"Add to Cart\"",
+      "targetSelector": ".product-card:first-child .price",
+      "description": "Skip expensive items over $100",
+      "url": "https://shop.example.com/products?q=wireless+headphones",
+      "timestamp": 1707850010000
+    },
+    {
+      "type": "click",
+      "element": {
+        "tag": "button",
+        "selector": ".product-card:first-child .add-to-cart",
+        "text": "Add to Cart"
+      },
+      "x": 350,
+      "y": 450,
+      "url": "https://shop.example.com/products?q=wireless+headphones",
+      "timestamp": 1707850012000
+    },
+    {
+      "type": "click",
+      "element": {
+        "tag": "a",
+        "selector": "#cart-link",
+        "text": "View Cart",
+        "href": "https://shop.example.com/cart"
+      },
+      "x": 1200,
+      "y": 30,
+      "url": "https://shop.example.com/products?q=wireless+headphones",
+      "timestamp": 1707850015000
+    },
+    {
+      "type": "navigation",
+      "navigationType": "pushState",
+      "url": "https://shop.example.com/cart",
+      "timestamp": 1707850016000
+    },
+    {
+      "type": "click",
+      "element": {
+        "tag": "button",
+        "selector": "#checkout-btn",
+        "text": "Proceed to Checkout"
+      },
+      "x": 800,
+      "y": 600,
+      "url": "https://shop.example.com/cart",
+      "timestamp": 1707850020000
+    }
+  ]
+}
