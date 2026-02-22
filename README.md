@@ -1,210 +1,84 @@
-# 🔴 Browser Use Recorder
+# browser-use-recorder
 
-Record browser interactions and auto-generate automation code for Playwright, Puppeteer, or Python — with AI decision points and MCP server export.
+## Detailed Description
 
-## Architecture
+browser-use-recorder is maintained as an industry-grade software project with production-ready engineering practices.  
+This repository includes documented setup, quality gates, operational guidance, and governance standards so contributors can safely build, test, and ship changes with confidence.
 
+## Problem Statement
+
+Describe the user or business problem this project solves, the target users, and expected outcomes.
+
+## Solution Overview
+
+Summarize the architecture, core modules, and runtime behavior at a high level.
+
+## Key Features
+
+- Clear project scope and intended use.
+- Reproducible local development workflow.
+- Test coverage and CI quality gates.
+- Security and contribution policies.
+- Deployment-ready repository structure.
+
+## Repository Structure
+
+```text
+.
+|-- src/                  # Core implementation
+|-- tests/                # Automated test suites
+|-- docs/                 # Design notes and operational docs
+|-- .github/workflows/    # CI pipelines
+|-- README.md
+|-- LICENSE
+|-- CONTRIBUTING.md
+|-- SECURITY.md
+|-- CODE_OF_CONDUCT.md
 ```
-┌─────────────────────┐     WebSocket      ┌──────────────────┐
-│  Chrome Extension    │ ──────────────────→│  Recorder Server │
-│  (content.js)        │   events stream    │  (server.js)     │
-│  - clicks            │                    │  - stores events │
-│  - form fills        │                    │  - HTTP API      │
-│  - navigation        │                    └────────┬─────────┘
-│  - AI decisions      │                             │
-└─────────────────────┘                    ┌─────────┴─────────┐
-                                           │                   │
-                                    ┌──────┴──────┐    ┌───────┴───────┐
-                                    │ Code Gen    │    │ MCP Exporter  │
-                                    │             │    │               │
-                                    │ - Playwright│    │ - package.json│
-                                    │ - Puppeteer │    │ - index.js    │
-                                    │ - Python    │    │ - tools       │
-                                    │ - TypeScript│    │ - resources   │
-                                    └─────────────┘    └───────────────┘
-```
 
-## Quick Start
+## Getting Started
 
-### 1. Install
+### Prerequisites
+
+- Git
+- Project runtime/toolchain for this repo
+
+### Local Setup
 
 ```bash
-cd browser-use-recorder
-npm install
+npm ci
+npm run lint
+npm test
+npm run build
 ```
 
-### 2. Start Recording
+## Usage
 
-```bash
-# Start the recorder server
-npm start
-# or
-node src/cli.js record
-```
+Document primary commands, API routes, CLI examples, or UI workflows here.
 
-### 3. Load Chrome Extension
+## Quality Standards
 
-1. Open Chrome → `chrome://extensions`
-2. Enable "Developer mode"
-3. Click "Load unpacked" → select the `extension/` folder
-4. Click the extension icon → "Start Recording"
-5. Browse normally — all interactions are captured
+- CI must pass before merge.
+- Changes require tests for critical behavior.
+- Security-sensitive changes should include risk notes.
+- Keep pull requests focused and reviewable.
 
-### 4. Generate Code
+## Security
 
-When you stop recording (Ctrl+C), code is auto-generated. Or manually:
+See `SECURITY.md` for responsible disclosure and handling guidelines.
 
-```bash
-# From a session file
-node src/cli.js generate output/session_xxx.json
+## Contributing
 
-# Specify framework and language
-node src/cli.js generate session.json -f puppeteer -l typescript -o my-test.ts
+See `CONTRIBUTING.md` for branching, commit, and pull request expectations.
 
-# Python output
-node src/cli.js generate session.json -l python -o automation.py
-```
+## Roadmap
 
-### 5. Add AI Decision Points
+Track upcoming milestones, technical debt, and planned feature work.
 
-During recording, use the extension popup or CLI:
+## Support
 
-```bash
-# Via CLI (while recorder is running)
-node src/cli.js add-decision \
-  -c "price > 100" \
-  --if-true "skip" \
-  --if-false 'click "Buy Now"' \
-  -s ".price-tag" \
-  -d "Skip expensive items"
-```
-
-Or via HTTP API:
-```bash
-curl -X POST http://localhost:3456/decision \
-  -H "Content-Type: application/json" \
-  -d '{"condition": "price > 100", "ifTrue": "skip", "ifFalse": "click Buy Now", "targetSelector": ".price"}'
-```
-
-### 6. Export as MCP Server
-
-```bash
-node src/cli.js export-mcp output/session_xxx.json \
-  -n "my-shopping-bot" \
-  -t "run_shopping_automation"
-```
-
-This creates a complete MCP server with:
-- `index.js` — MCP server with stdio transport
-- `automation.js` — Standalone automation script
-- `recording.json` — Raw event data
-- `package.json` — Dependencies
-- `README.md` — Usage instructions
-
-## CLI Commands
-
-| Command | Description |
-|---------|-------------|
-| `record` | Start recorder server, wait for browser |
-| `generate <file>` | Generate code from session file |
-| `export-mcp <file>` | Export session as MCP server |
-| `add-decision` | Add AI decision point to running session |
-| `info <file>` | Show session information |
-
-## Code Generation Options
-
-| Option | Values | Default |
-|--------|--------|---------|
-| `--framework` | `playwright`, `puppeteer` | `playwright` |
-| `--language` | `javascript`, `typescript`, `python` | `javascript` |
-| `--no-comments` | Remove comments | comments on |
-| `--no-waits` | Remove wait statements | waits on |
-| `--headless` | Headless browser mode | `true` |
-| `--test-name` | Function name | `recorded_automation` |
-
-## AI Decision Points
-
-Decision points let you add conditional logic to your automation:
-
-```
-🤖 if (price > $100) → skip item
-🤖 if (page contains "Out of Stock") → go to next page
-🤖 if (rating >= 4.5) → click "Add to Cart"
-```
-
-Supported condition patterns:
-- **Numeric comparison**: `price > 100`, `count <= 5`
-- **Text contains**: `contains "Sale"`, `includes "Free Shipping"`
-- **Text equals**: `is "In Stock"`, `equals "Available"`
-
-## HTTP API
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/status` | GET | Server status |
-| `/events` | GET | All recorded events |
-| `/generate` | POST | Generate code (body: `{framework, language}`) |
-| `/decision` | POST | Add AI decision point |
-| `/export-mcp` | POST | Export as MCP server |
-| `/clear` | POST | Clear all events |
-
-## Generated MCP Server
-
-The exported MCP server provides:
-
-### Tools
-- `run_browser_automation` — Execute the recorded automation
-  - `headless`: Run headless (default: true)
-  - `baseUrl`: Override starting URL
-  - `variables`: Override form input values
-  - `timeout`: Max execution time
-- `get_recording_info` — Get recording metadata
-- `get_decision_points` — List AI decision points
-
-### Resources
-- `recording://events` — Raw event data
-- `recording://code` — Generated automation code
-
-## Example Output
-
-### Playwright (JavaScript)
-```javascript
-const { chromium } = require('playwright');
-
-async function recorded_automation() {
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
-  const page = await context.newPage();
-
-  await page.goto('https://example.com');
-
-  // Click on button "Sign In"
-  await page.getByRole('button', { name: 'Sign In' }).click();
-
-  // Type "user@example.com" into input
-  await page.getByPlaceholder('Email').fill('user@example.com');
-
-  // 🤖 AI Decision Point: Check if price is within budget
-  {
-    const targetEl = await page.$('.price');
-    const targetText = targetEl ? await targetEl.textContent() : '';
-    const conditionMet = (() => {
-      const text = targetText;
-      const num = parseFloat(text.replace(/[^0-9.]/g, ''));
-      return num > 100;
-    })();
-    if (conditionMet) {
-      console.log('✅ Condition met: price > 100');
-      return; // Skip remaining steps
-    }
-  }
-
-  await browser.close();
-}
-
-recorded_automation().catch(console.error);
-```
+Open a GitHub issue for bugs, feature requests, or documentation gaps.
 
 ## License
 
-MIT
+This project is released under the MIT License.
